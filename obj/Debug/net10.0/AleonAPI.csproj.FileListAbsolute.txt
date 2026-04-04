@@ -33,3 +33,4 @@
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.pdb
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.genruntimeconfig.cache
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/ref/AleonAPI.dll
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.sourcelink.json
