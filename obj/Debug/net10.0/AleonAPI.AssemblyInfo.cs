@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AleonAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7cad69beb4eb41ae6599e3977befc829d90a310")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87b2c597d3c7d109331f7ee0e49a11685b47b4a9")]
 [assembly: System.Reflection.AssemblyProductAttribute("AleonAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AleonAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
