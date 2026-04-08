@@ -28,6 +28,13 @@ public static class CustomIdentityEndpoint
          .Produces(StatusCodes.Status200OK)
          .Produces(StatusCodes.Status400BadRequest);
 
+         group.MapPost("forgot-password", ForgotPassword)
+         .WithName("ForgotPassword")
+         .WithSummary("")
+         .WithDescription("send password reset link to user email")
+         .Produces(StatusCodes.Status200OK)
+         .Produces(StatusCodes.Status400BadRequest);
+
 
       return route;
       //.RequireAuthorization("AdminOnly");
@@ -84,7 +91,7 @@ public static class CustomIdentityEndpoint
          $"""
              Your account has been created. Please change your password by visiting: {baseURL}/Identity/Account/Manage
 
-             {baseURL}/Setpassword.html?email={dto.Email}&restCode={encodedToken}
+             {baseURL}/Setpassword.html?email={dto.Email}&resetCode={encodedToken}
           """
       );
 
@@ -113,26 +120,73 @@ public static class CustomIdentityEndpoint
       {
          var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.ResetCode));
 
-         var result = userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
+         var result = await userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
+if (!result.Succeeded)
+{
+    return Results.BadRequest(new
+    {
+        Message = "Password reset failed",
+        Errors = result.Errors.Select(e => e.Description)
+    });
+}
 
-        
- if (result.Result.Succeeded)
+         if (result.Succeeded)
          {
             return Results.Ok(new { Message = "Password reset successful" });
          }
-         return Results.BadRequest(new { Message = "error" });
+         else
+         {
+
+            return Results.BadRequest(new { Message = "error" });
+         }
 
       }
-      catch(FormatException)
+      catch (FormatException)
       {
          return Results.BadRequest(new { Message = "Invalid token" });
       }
 
       catch (Exception ex)
       {
-         return Results.BadRequest(new {Message = $"Error: {ex.Message}"});
+         return Results.BadRequest(new { Message = $"Error: {ex.Message}" });
       }
 
-      return Results.Ok(new { Message = "Password reset successful" });
+   }
+
+
+   private static async Task<IResult> ForgotPassword(
+      ForgotPasswordRequest request,
+      UserManager<User> userManager,
+      IEmailSender emailSender,
+      IConfiguration config)
+   {
+      if (string.IsNullOrEmpty(request.Email))
+      {
+         return Results.BadRequest(new { Message = "Email is required" });
+      }
+
+      var user = await userManager.FindByEmailAsync(request.Email);
+
+      if (user is null)
+      {
+         return Results.BadRequest(new { Message = "User not found." });
+      }
+
+      var token = await userManager.GeneratePasswordResetTokenAsync(user);
+      var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+      var baseURL = config["BaseURL"] ?? "https://localhost:7034";
+
+      await emailSender.SendEmailAsync(
+         request.Email,
+         "Password Reset",
+         $"""
+             You requested a password reset. Please reset your password by visiting: {baseURL}/Identity/Account/Manage
+
+             {baseURL}/Setpassword.html?email={request.Email}&resetCode={encodedToken}
+          """
+      );
+
+      return Results.Ok(new { Message = $"Password reset link sent to {request.Email}" });
    }
 }
