@@ -1,3 +1,7 @@
+//system usings
+global using System.ComponentModel.DataAnnotations;
+
+//app usings
 global using AleonAPI.Extensions.cs;
 global using AleonAPI.Data;
 global using AleonAPI.Models;
