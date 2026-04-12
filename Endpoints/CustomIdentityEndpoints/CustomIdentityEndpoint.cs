@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Security.Claims;
 using System.Text;
 using System.Web;
 using AleonAPI.Endpoints.CustomIdentityEndpoints.Models;
@@ -28,12 +30,39 @@ public static class CustomIdentityEndpoint
          .Produces(StatusCodes.Status200OK)
          .Produces(StatusCodes.Status400BadRequest);
 
-         group.MapPost("forgot-password", ForgotPassword)
-         .WithName("ForgotPassword")
-         .WithSummary("")
-         .WithDescription("send password reset link to user email")
-         .Produces(StatusCodes.Status200OK)
-         .Produces(StatusCodes.Status400BadRequest);
+      group.MapPost("forgot-password", ForgotPassword)
+      .WithName("ForgotPassword")
+      .WithSummary("")
+      .WithDescription("send password reset link to user email")
+      .Produces(StatusCodes.Status200OK)
+      .Produces(StatusCodes.Status400BadRequest);
+
+      group.MapGet("/manage/profile", GetProfileInfo)
+      .WithName("GetProfileInfo")
+      .WithSummary("Get user profile information")
+      .WithDescription("Get the profile information of the currently authenticated user")
+      .RequireAuthorization()
+      .Produces(StatusCodes.Status200OK)
+      .Produces(StatusCodes.Status404NotFound)
+      .Produces(StatusCodes.Status401Unauthorized);
+
+      group.MapPut("/manage/profile", UpdateProfileInfo)
+      .WithName("UpdateProfile")
+      .WithSummary("Update user profile information")
+      .WithDescription("Update the profile information of the currently authenticated user")
+      .RequireAuthorization()
+      .Produces(StatusCodes.Status200OK)
+      .Produces(StatusCodes.Status404NotFound)
+      .Produces(StatusCodes.Status401Unauthorized);
+
+      group.MapGet("/manage/users", GetUsersList)
+      .WithName("GetUsersList")
+      .WithSummary("Get list of all users")
+      .WithDescription("Get a list of all registered users (Admin only)")
+      .RequireAuthorization()
+      .Produces<IEnumerable<UserProfileResponse>>(StatusCodes.Status200OK)
+      .Produces(StatusCodes.Status401Unauthorized)
+      .Produces(StatusCodes.Status403Forbidden);
 
 
       return route;
@@ -121,14 +150,14 @@ public static class CustomIdentityEndpoint
          var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.ResetCode));
 
          var result = await userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
-if (!result.Succeeded)
-{
-    return Results.BadRequest(new
-    {
-        Message = "Password reset failed",
-        Errors = result.Errors.Select(e => e.Description)
-    });
-}
+         if (!result.Succeeded)
+         {
+            return Results.BadRequest(new
+            {
+               Message = "Password reset failed",
+               Errors = result.Errors.Select(e => e.Description)
+            });
+         }
 
          if (result.Succeeded)
          {
@@ -189,4 +218,80 @@ if (!result.Succeeded)
 
       return Results.Ok(new { Message = $"Password reset link sent to {request.Email}" });
    }
+
+
+   private static async Task<IResult> GetProfileInfo(ClaimsPrincipal userClaims, UserManager<User> userManager)
+   {
+
+      var user = await userManager.GetUserAsync(userClaims);
+
+      if (user is null)
+      {
+         return Results.Unauthorized();
+      }
+
+      var profileInfo = new UserProfileResponse
+      {
+         Id = user.Id,
+         Email = user.Email,
+         FirstName = user.FirstName,
+         LastName = user.LastName,
+         FullName = $"{user.FirstName} {user.LastName}",
+
+      };
+
+      return Results.Ok(profileInfo);
+   }
+
+
+   private static async Task<IResult> UpdateProfileInfo(
+      ClaimsPrincipal userClaims,
+      UserManager<User> userManager,
+      UpdateProfileRequest request)
+   {
+      var user = await userManager.GetUserAsync(userClaims);
+
+      if (user is null)
+      {
+         return Results.Unauthorized();
+      }
+
+      user.FirstName = request.FirstName;
+      user.LastName = request.LastName;
+
+      if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.LastName))
+      {
+         return Results.BadRequest(new { Message = "First name and last name cannot be empty" });
+      }
+
+      var result = await userManager.UpdateAsync(user);
+
+      if (result.Succeeded)
+      {
+         return Results.Ok(new { Message = "Profile updated successfully" });
+      }
+      else
+      {
+         return Results.BadRequest(new
+         {
+            Message = "Profile update failed",
+            Errors = result.Errors.Select(e => e.Description)
+         });
+      }
+   }
+
+   private static async Task<IResult> GetUsersList(UserManager<User> userManager)
+   {
+      var users = userManager.Users.Select(u => new UserProfileResponse
+      {
+         Id = u.Id,
+         Email = u.Email,
+         FirstName = u.FirstName,
+         LastName = u.LastName,
+         FullName = $"{u.FirstName} {u.LastName}",
+      }).ToList();
+
+      return Results.Ok(users);
+   }
+
 }

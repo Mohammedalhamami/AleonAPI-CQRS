@@ -1,5 +1,14 @@
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/appsettings.Development.json
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/appsettings.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/artifacts.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.andes.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.Antarctica.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.atlantis.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.gobekli.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.kailash.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.sahara.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/catalogRecords.yonaguni.json
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Data/SeedData/sites.json
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.staticwebassets.runtime.json
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.staticwebassets.endpoints.json
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI
@@ -133,3 +142,4 @@
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.pdb
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.genruntimeconfig.cache
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/ref/AleonAPI.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/skills-lock.json

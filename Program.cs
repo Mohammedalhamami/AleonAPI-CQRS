@@ -2,7 +2,9 @@
 
 using AleonAPI.Endpoints.CustomIdentityEndpoints;
 using AleonAPI.Endpoints.Home;
+using AleonAPI.Endpoints.Sites;
 using AleonAPI.Services;
+using AleonAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +29,12 @@ builder.Services.AddAuthorizationBuilder()
 //Email Sender Service
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
+builder.Services.AddScoped<ISiteService, SiteService>();
 
 builder.Services.AddValidation();
 
 builder.Services.AddControllers();
+
 
 var app = builder.Build();
 
@@ -40,6 +44,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    await DataSeed.ManageDataAsync(scope.ServiceProvider);
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
@@ -47,6 +56,8 @@ app.UseAuthorization();
 app.MapHomeEndpoints();
 app.MapCustomIdentityEndpoints();
 app.UseMiddleware<BlockIdentityEndpoints>();
+
+app.MapSiteEndpoints();
 
 var authRouteGroup = app.MapGroup("/api/auth")
     .WithTags("Admin");
