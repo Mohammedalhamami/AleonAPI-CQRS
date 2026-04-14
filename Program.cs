@@ -58,6 +58,7 @@ app.MapCustomIdentityEndpoints();
 app.UseMiddleware<BlockIdentityEndpoints>();
 
 app.MapSiteEndpoints();
+app.MapArtifactMediaFileEndpoints();
 
 var authRouteGroup = app.MapGroup("/api/auth")
     .WithTags("Admin");
