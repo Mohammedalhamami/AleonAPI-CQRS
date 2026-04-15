@@ -1,4 +1,5 @@
 using System.Reflection.Metadata;
+using AleonAPI.Filters;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi;
 
@@ -21,10 +22,7 @@ namespace AleonAPI.Extensions.cs
 
                                   ## Aeon Research Division
 
-                                  Internal API for managing recovered artifacts and research data.
-                                  Provides secure access for field researchers and analysts. 
-
-                                  ### Key Features:
+                                  Internal API for managing recovered artifacts and research data.Provides secure access for field researchers and analysts.### Key Features:
                                   - Site and Artifact Catalog
                                   - Research record submissions
                                   - Secure media storage
@@ -57,6 +55,8 @@ namespace AleonAPI.Extensions.cs
                     }
                 });
 
+                c.UseInlineDefinitionsForEnums();
+                c.SchemaFilter<EnumStringFilter>();
 
                 string[] hiddenEndpoints =
                 [

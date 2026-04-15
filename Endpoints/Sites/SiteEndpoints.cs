@@ -41,6 +41,12 @@ public static class SiteEndpoints
         .Produces(StatusCodes.Status500InternalServerError)
         .WithSummary("Get a public site by ID");
 
+        publicGroup.MapGet("/{siteId:int}/artifacts", GetPublicArtifactsBySiteId)
+       .WithName(nameof(GetPublicArtifactsBySiteId))
+       .Produces<List<PublicArtifactResponse>>(StatusCodes.Status200OK)
+       .Produces(StatusCodes.Status400BadRequest)
+       .Produces(StatusCodes.Status500InternalServerError)
+       .WithDescription("Endpoints that expose artifact data based on site id");
 
         //private group 
 
@@ -100,6 +106,18 @@ public static class SiteEndpoints
         .Produces(StatusCodes.Status404NotFound)
         .WithSummary("Delete a Site")
         .WithDescription("Deletes an existing site based on the provided site ID.");
+
+
+
+        privateGroup.MapGet("/{siteId:int}/artifacts", GetPrivateArtifactsBySiteId)
+           .WithName(nameof(GetPrivateArtifactsBySiteId))
+           .Produces<List<PrivateArtifactResponse>>(StatusCodes.Status200OK)
+           .Produces(StatusCodes.Status400BadRequest)
+           .Produces(StatusCodes.Status500InternalServerError)
+           .WithDescription("Endpoints that expose artifact data based on site id");
+
+
+
 
         return route;
 
@@ -161,6 +179,19 @@ public static class SiteEndpoints
     {
         var deleted = await siteService.DeleteSiteAsync(siteId, ct);
         return deleted ? TypedResults.NoContent() : TypedResults.NotFound();
+    }
+
+    private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySiteId(IArtifactService artifactService, int siteId, CancellationToken ct)
+    {
+        var artifacts = await artifactService.GetPublicArtifactsBySiteIdAsync(siteId, ct);
+        if (artifacts is null) return TypedResults.NotFound();
+        return TypedResults.Ok(artifacts);
+    }
+    private static async Task<Results<Ok<List<PrivateArtifactResponse>>, NotFound>> GetPrivateArtifactsBySiteId(IArtifactService artifactService, int siteId, CancellationToken ct)
+    {
+        var artifacts = await artifactService.GetPrivateArtifactsBySiteIdAsync(siteId, ct);
+        if (artifacts is null) return TypedResults.NotFound();
+        return TypedResults.Ok(artifacts);
     }
 
 }

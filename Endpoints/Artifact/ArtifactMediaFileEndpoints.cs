@@ -1,10 +1,11 @@
 
 using AleonAPI.Filters;
+using AleonAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
-namespace AleonAPI.Endpoints.Sites;
+namespace AleonAPI.Endpoints.Artifact;
 
 public static class ArtifactMediaFileEndpoints
 {
@@ -15,7 +16,7 @@ public static class ArtifactMediaFileEndpoints
         //endpoints groups for ArtifactMediaFiles
 
         var publicGroup = route.MapGroup("api/public/artifacts/images")
-            
+
             .WithSummary("Artifact media file endpoints")
             .WithDescription("Endpoints that expose artifact media file data, accessible only to admin users")
             .WithTags("Artifact Media Files - Public")
@@ -30,8 +31,27 @@ public static class ArtifactMediaFileEndpoints
             .Produces(StatusCodes.Status404NotFound);
 
 
+        //private group 
+        var privateGroup = route.MapGroup("api/private/artifacts/{artifactId:int}/images")
+            .RequireAuthorization()
+            .WithSummary("Artifact media file endpoints")
+            .WithDescription("Endpoints that expose artifact media file data, accessible only to admin users")
+            .WithTags("Artifact Media Files - Private")
+            .AddEndpointFilter<ExceptionHandlingFilter>();
 
-        return publicGroup;
+
+        privateGroup.MapPost("", CreateArtifactMediaFile)
+            .WithName("CreateArtifactMediaFile")
+            .WithSummary("Create artifact media file")
+            .WithDescription("Create a new artifact media file for a specific artifact. Accepts an image file and a boolean indicating if it's the primary media file for the artifact. Returns a 201 Created response with the location of the new media file. Accessible only to admin users.")
+            .Accepts<IFormFile>("multipart/form-data")
+            .DisableAntiforgery()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound);
+
+
+        return route;
 
     }
 
@@ -58,7 +78,25 @@ public static class ArtifactMediaFileEndpoints
         response.Headers.CacheControl = "public, max-age=86400";
 
 
-        return TypedResults.File(mediaFile.Data, mediaFile.ContentType, fileDownloadName: mediaFile.FileName);
+        return TypedResults.File(mediaFile.Data, mediaFile.ContentType);
+
+    }
+
+
+    private static async Task<Results<Created, NotFound, BadRequest>> CreateArtifactMediaFile(
+        int artifactId,
+        IFormFile file,
+        bool isPrimary,
+        IArtifactMediaFileService mediaFileService,
+        CancellationToken cancellationToken)
+    {
+
+        var mediaFile = await mediaFileService.CreateArtifactMediaFileAsync(artifactId, file, isPrimary, cancellationToken);
+        if (mediaFile == null) return TypedResults.NotFound();
+
+        var location = $"/api/public/artifacts/images/{mediaFile.Id}";
+
+        return TypedResults.Created(location);
 
     }
 

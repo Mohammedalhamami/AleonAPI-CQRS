@@ -1,5 +1,6 @@
 
 
+using AleonAPI.Endpoints.Artifact;
 using AleonAPI.Endpoints.CustomIdentityEndpoints;
 using AleonAPI.Endpoints.Home;
 using AleonAPI.Endpoints.Sites;
@@ -30,6 +31,8 @@ builder.Services.AddAuthorizationBuilder()
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
+builder.Services.AddScoped<IArtifactService, ArtifactService>();
 
 builder.Services.AddValidation();
 
@@ -59,6 +62,7 @@ app.UseMiddleware<BlockIdentityEndpoints>();
 
 app.MapSiteEndpoints();
 app.MapArtifactMediaFileEndpoints();
+app.MapArtifactEndpoints();
 
 var authRouteGroup = app.MapGroup("/api/auth")
     .WithTags("Admin");
