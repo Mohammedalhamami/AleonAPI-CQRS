@@ -18,6 +18,8 @@
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.pdb
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Humanizer.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/MediatR.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/MediatR.Contracts.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Microsoft.Build.Framework.dll
@@ -132,6 +134,9 @@
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/rjsmrazor.dswa.cache.json
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/scopedcss/bundle/AleonAPI.styles.css
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/eq08q6iov0-{0}-dheta0dgh1-dheta0dgh1.gz
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/bhfu2woswo-{0}-wbzjiwdb6x-wbzjiwdb6x.gz
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/gxrav83eaz-{0}-wvl6s1jv3a-wvl6s1jv3a.gz
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/staticwebassets.build.json
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/staticwebassets.build.json.cache
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/staticwebassets.development.json
@@ -143,6 +148,3 @@
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.pdb
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.genruntimeconfig.cache
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/ref/AleonAPI.dll
-/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/eq08q6iov0-{0}-dheta0dgh1-dheta0dgh1.gz
-/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/bhfu2woswo-{0}-wbzjiwdb6x-wbzjiwdb6x.gz
-/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/gxrav83eaz-{0}-wvl6s1jv3a-wvl6s1jv3a.gz

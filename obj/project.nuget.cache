@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "T2IUaRv3szs=",
+  "dgSpecHash": "zKAm+k01S5c=",
   "success": true,
   "projectFilePath": "/Users/ta3leem/demos/AleonAPI/AleonAPI.csproj",
   "expectedPackageFiles": [
     "/Users/ta3leem/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
+    "/Users/ta3leem/.nuget/packages/mediatr/12.5.0/mediatr.12.5.0.nupkg.sha512",
+    "/Users/ta3leem/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",
     "/Users/ta3leem/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.5/microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512",
     "/Users/ta3leem/.nuget/packages/microsoft.aspnetcore.identity.entityframeworkcore/10.0.5/microsoft.aspnetcore.identity.entityframeworkcore.10.0.5.nupkg.sha512",
     "/Users/ta3leem/.nuget/packages/microsoft.build.framework/18.0.2/microsoft.build.framework.18.0.2.nupkg.sha512",

@@ -1,11 +1,9 @@
-
-
 using AleonAPI.Endpoints.Artifact;
 using AleonAPI.Endpoints.CustomIdentityEndpoints;
 using AleonAPI.Endpoints.Home;
 using AleonAPI.Endpoints.Sites;
 using AleonAPI.Services;
-using AleonAPI.Services.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -18,27 +16,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddCustomSwagger();
 
+// Register MediatR - scans all handlers in the assembly automatically
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
-//add Identity endpoints,
+// Identity endpoints
 builder.Services.AddIdentityApiEndpoints<User>(options =>
         options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-//add identity authorizaiton 
+// Authorization
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-//Email Sender Service
+
+// Email Sender Service
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
-builder.Services.AddScoped<ISiteService, SiteService>();
-builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
-builder.Services.AddScoped<IArtifactService, ArtifactService>();
-
 builder.Services.AddValidation();
-
 builder.Services.AddControllers();
-
 
 var app = builder.Build();
 
