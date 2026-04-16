@@ -19,7 +19,7 @@ public static class DataUtility
         var res = BuildConnectionString(databaseUrl);
         if (string.IsNullOrEmpty(res))
         {
-            Console.WriteLine("DEBUG: BuildConnectionString failed to parse the URL. DATABASE_URL was found but format was invalid.");
+            Console.WriteLine($"DEBUG: BuildConnectionString could not resolve. URL length: {databaseUrl.Length}. Starts with: {(databaseUrl.Length > 5 ? databaseUrl[..5] : databaseUrl)}");
         }
         
         return res ?? connectionString!;
@@ -28,6 +28,13 @@ public static class DataUtility
 
     private static string? BuildConnectionString(string databaseUrl)
     {
+        // If the string already looks like a connection string, return it as-is
+        if (databaseUrl.Contains("Host=", StringComparison.OrdinalIgnoreCase) || 
+            databaseUrl.Contains("Server=", StringComparison.OrdinalIgnoreCase))
+        {
+            return databaseUrl;
+        }
+
         try
         {
             var databaseUri = new Uri(databaseUrl);
