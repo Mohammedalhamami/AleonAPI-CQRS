@@ -10,28 +10,37 @@ public static class DataUtility
         var connectionString = configuration.GetConnectionString("DbConnection");
         var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-        return string.IsNullOrEmpty(databaseUrl)
-            ? connectionString!
-            : BuildConnectionString(databaseUrl);
+        if (string.IsNullOrEmpty(databaseUrl))
+        {
+            return connectionString!;
+        }
+
+        return BuildConnectionString(databaseUrl) ?? connectionString!;
     }
 
 
-    private static string BuildConnectionString(string databaseUrl)
+    private static string? BuildConnectionString(string databaseUrl)
     {
-        var databaseUri = new Uri(databaseUrl);
-
-        var userInfo = databaseUri.UserInfo.Split(':');
-        var builder = new NpgsqlConnectionStringBuilder
+        try
         {
-            Host = databaseUri.Host,
-            Port = databaseUri.Port,
-            Username = userInfo[0],
-            Password = userInfo[1],
-            Database = databaseUri.LocalPath.TrimStart('/'),
-            SslMode = SslMode.Prefer
-        };
+            var databaseUri = new Uri(databaseUrl);
+            var userInfo = databaseUri.UserInfo.Split(':');
+            var builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = databaseUri.Host,
+                Port = databaseUri.Port,
+                Username = userInfo[0],
+                Password = userInfo[1],
+                Database = databaseUri.LocalPath.TrimStart('/'),
+                SslMode = SslMode.Prefer
+            };
 
-        return builder.ToString();
+            return builder.ToString();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 
 }
