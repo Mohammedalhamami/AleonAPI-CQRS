@@ -18,11 +18,26 @@ namespace AleonAPI.Data
          await using var dbContextSvc = svcProvider.GetRequiredService<ApplicationDbContext>();
 
          // Apply any pending migrations
-         await dbContextSvc.Database.MigrateAsync();
+         try 
+         {
+            await dbContextSvc.Database.MigrateAsync();
+         }
+         catch (Exception ex)
+         {
+            Console.WriteLine($"ERROR: Migration failed: {ex.Message}");
+         }
 
          // Identity-related seeds (roles, admin user, etc.)
-         await SeedRolesAsync(svcProvider);
-         await SeedUsersAsync(svcProvider);
+         try 
+         {
+            await SeedRolesAsync(svcProvider);
+            await SeedUsersAsync(svcProvider);
+         }
+         catch (Exception ex)
+         {
+            Console.WriteLine($"WARNING: Identity seeding failed. Tables might not be ready yet. Error: {ex.Message}");
+            return; 
+         }
 
          // Call seeders in order
          await SeedSitesAsync(dbContextSvc);
@@ -30,7 +45,6 @@ namespace AleonAPI.Data
          await SeedArtifactMediaFilesAsync(dbContextSvc);
          await SeedCatalogRecordsAsync(svcProvider);
          await ResetPostgresSequencesAsync(dbContextSvc);
-
      }
 
 

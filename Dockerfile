@@ -1,6 +1,7 @@
 # Base stage for running the app
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 WORKDIR /app
+RUN apt-get update && apt-get install -y libgssapi-krb5-2 && rm -rf /var/lib/apt/lists/*
 EXPOSE 8080
 EXPOSE 8081
 
