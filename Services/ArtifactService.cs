@@ -232,4 +232,62 @@ public class ArtifactService(ApplicationDbContext context) : IArtifactService
         return await context.Sites.AsNoTracking().AnyAsync(s => s.Id == siteId, ct);
     }
 
+    public async Task<PrivateArtifactResponse?> UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct)
+    {
+        var artifact = await context.Artifacts.FindAsync(artifactId);
+        if (artifact == null) return null;
+
+        // Confirm the site exists
+        var site = await context.Sites.AsNoTracking()
+        .FirstOrDefaultAsync(s => s.Id == request.SiteId, ct);
+
+        if (site == null) return new PrivateArtifactResponse();
+
+        // Validate the artifact type string
+        if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType))
+        {
+            throw new ArgumentException($"Invalid artifact type '{request.Type}'. " +
+                $"Allowed values are: {string.Join(", ", Enum.GetNames(typeof(ArtifactType)))}");
+        }
+
+        artifact.Name = request.Name;
+        artifact.CatalogNumber = request.CatalogNumber;
+        artifact.PublicNarrative = request.PublicNarrative;
+        artifact.DateDiscovered = request.DateDiscovered;
+        artifact.Type = artifactType.ToString();
+        artifact.SiteId = request.SiteId;
+        artifact.Description = request.Description;
+
+        await context.SaveChangesAsync(ct);
+
+        return new PrivateArtifactResponse
+        {
+            Id = artifact.Id,
+            Name = artifact.Name,
+            CatalogNumber = artifact.CatalogNumber,
+            PublicNarrative = artifact.PublicNarrative,
+            DateDiscovered = artifact.DateDiscovered,
+            Type = artifact.Type,
+            SiteId = artifact.SiteId,
+            Description = artifact.Description,
+            SiteName = site.Name,
+            PrimaryImageUrl = artifact.MediaFiles
+            .Where(mf => mf.IsPrimary)
+            .Select(mf => $"/api/public/artifacts/images/{mf.Id}")
+            .FirstOrDefault(),
+            CatalogRecordCount = artifact.CatalogRecords.Count,
+        };
+    }
+
+    public async Task<bool> DeleteArtifactAsync(int artifactId, CancellationToken ct)
+    {
+        var artifact = await context.Artifacts
+        .Include(a => a.MediaFiles)
+        .FirstOrDefaultAsync(a => a.Id == artifactId, ct);
+
+        if (artifact == null) return false;
+        context.Artifacts.Remove(artifact);
+        await context.SaveChangesAsync(ct);
+        return true;
+    }
 }

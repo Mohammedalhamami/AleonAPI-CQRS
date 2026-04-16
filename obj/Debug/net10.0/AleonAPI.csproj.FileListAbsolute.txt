@@ -143,3 +143,6 @@
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.pdb
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/AleonAPI.genruntimeconfig.cache
 /Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/ref/AleonAPI.dll
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/eq08q6iov0-{0}-dheta0dgh1-dheta0dgh1.gz
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/bhfu2woswo-{0}-wbzjiwdb6x-wbzjiwdb6x.gz
+/Users/ta3leem/demos/AleonAPI/obj/Debug/net10.0/compressed/gxrav83eaz-{0}-wvl6s1jv3a-wvl6s1jv3a.gz

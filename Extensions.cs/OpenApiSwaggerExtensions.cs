@@ -12,31 +12,6 @@ namespace AleonAPI.Extensions.cs
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Aeon Registry API",
-                    Version = "v1",
-                    Description = """
-
-                                  <img src="/images/AeonRegistryLogoBLK.png" height="120" />
-
-                                  ## Aeon Research Division
-
-                                  Internal API for managing recovered artifacts and research data.Provides secure access for field researchers and analysts.### Key Features:
-                                  - Site and Artifact Catalog
-                                  - Research record submissions
-                                  - Secure media storage
-                                  - User role management
-
-                                  """,
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Aeon Registry Team",
-                        Url = new Uri("https://learn.coderfoundry.com"),
-                        Email = "support@coderfoundry.com"
-                    }
-                });
-
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -70,6 +45,31 @@ namespace AleonAPI.Extensions.cs
                     "api/auth/manage/info",
                     "api/auth/manage/2fa"
                 ];
+
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Aeon Registry API",
+                    Version = "v1",
+                    Description = """
+        <img src="/images/AeonRegistryLogoBLK.png" height="120" />
+
+        ## Aeon Research Division
+
+        Internal API for managing recovered artifacts and research data.Provides secure access for field researchers, curators, and analysts.### Key Features:
+        - Site and artifact cataloging
+        - Research record submissions & verification
+        - Secure digital media storage
+        - User role management
+
+        [Launch Public Test Site](/site/sites-map.html)
+        """,
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Aeon Registry Team",
+                        Url = new Uri("https://coderfoundry.com"),
+                        Email = "support@coderfoundry.com"
+                    }
+                });
 
                 c.DocInclusionPredicate((docName, ApiDescription) =>
                 {

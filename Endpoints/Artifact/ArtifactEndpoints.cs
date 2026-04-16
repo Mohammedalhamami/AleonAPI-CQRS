@@ -24,14 +24,14 @@ public static class ArtifactEndpoints
         .WithDescription("Endpoints that expose artifact data, accessible only to admin users");
 
 
-         publicGroup.MapGet("/{artifactId:int}", GetPublicArtifactById)
-        .WithName(nameof(GetPublicArtifactById))
-        .WithDescription("Returns a specific artifact by its ID, including all private data")
-        .Produces<PublicArtifactResponse>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError)
-        .WithSummary("Get a specific artifact by its ID");
+        publicGroup.MapGet("/{artifactId:int}", GetPublicArtifactById)
+       .WithName(nameof(GetPublicArtifactById))
+       .WithDescription("Returns a specific artifact by its ID, including all private data")
+       .Produces<PublicArtifactResponse>(StatusCodes.Status200OK)
+       .Produces(StatusCodes.Status400BadRequest)
+       .Produces(StatusCodes.Status404NotFound)
+       .Produces(StatusCodes.Status500InternalServerError)
+       .WithSummary("Get a specific artifact by its ID");
 
 
         //private group 
@@ -71,7 +71,29 @@ public static class ArtifactEndpoints
         .Produces(StatusCodes.Status500InternalServerError)
         .WithSummary("Get a specific artifact by its ID");
 
-       
+
+        privateGroup.MapPut("/{artifactId:int}", UpdateArtifact)
+        .WithName(nameof(UpdateArtifact))
+        .WithDescription("Updates an existing artifact with the provided data, accessible only to admin users")
+        .Accepts<UpdateArtifactRequest>("application/json")
+        .Produces<PrivateArtifactResponse>(StatusCodes.Status200OK)
+        .ProducesValidationProblem()
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status500InternalServerError)
+        .WithSummary("Update an existing artifact");
+
+
+        privateGroup.MapDelete("/{artifactId:int}", DeleteArtifact)
+        .WithName(nameof(DeleteArtifact))
+        .WithDescription("Deletes an existing artifact, accessible only to admin users")
+        .Produces<bool>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status500InternalServerError)
+        .WithSummary("Delete an existing artifact");
 
 
 
@@ -122,5 +144,26 @@ public static class ArtifactEndpoints
         return TypedResults.Ok(artifact);
     }
 
-    //endponts 
+    private static async Task<Results<Ok<PrivateArtifactResponse>, NotFound>> UpdateArtifact(
+        IArtifactService artifactService,
+        int artifactId,
+        UpdateArtifactRequest request,
+        CancellationToken ct)
+    {
+        var artifact = await artifactService.UpdateArtifactAsync(artifactId, request, ct);
+        if (artifact is null) return TypedResults.NotFound();
+        return TypedResults.Ok(artifact);
+    }
+
+    private static async Task<Results<NoContent, NotFound>> DeleteArtifact(
+        IArtifactService artifactService,
+        int artifactId,
+        CancellationToken ct)
+    {
+        var result = await artifactService.DeleteArtifactAsync(artifactId, ct);
+        if (!result) return TypedResults.NotFound();
+        return TypedResults.NoContent();
+    }
+
+
 }

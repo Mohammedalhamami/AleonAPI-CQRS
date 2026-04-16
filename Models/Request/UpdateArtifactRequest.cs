@@ -1,10 +1,7 @@
-using AleonAPI.Enums;
+namespace AleonAPI.Models.Request;
 
-namespace AleonAPI.Models;
-public class Artifact
+public class UpdateArtifactRequest
 {
-    public int Id { get; set; }
-
     [Required, MaxLength(200)]
     public string? Name { get; set; }
 
@@ -23,10 +20,4 @@ public class Artifact
 
     [Required]
     public int SiteId { get; set; }
-
-    // Navigation property
-    public Site? Site { get; set; }
-    public List<ArtifactMediaFile> MediaFiles { get; set; } = [];
-    public List<CatalogRecord> CatalogRecords { get; set; } = [];
-
 }
