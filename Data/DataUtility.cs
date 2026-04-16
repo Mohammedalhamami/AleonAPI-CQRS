@@ -12,10 +12,17 @@ public static class DataUtility
 
         if (string.IsNullOrEmpty(databaseUrl))
         {
+            Console.WriteLine("DEBUG: DATABASE_URL is null or empty. Falling back to DbConnection.");
             return connectionString!;
         }
 
-        return BuildConnectionString(databaseUrl) ?? connectionString!;
+        var res = BuildConnectionString(databaseUrl);
+        if (string.IsNullOrEmpty(res))
+        {
+            Console.WriteLine("DEBUG: BuildConnectionString failed to parse the URL. DATABASE_URL was found but format was invalid.");
+        }
+        
+        return res ?? connectionString!;
     }
 
 
