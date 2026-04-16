@@ -7,7 +7,6 @@
 **/.agents
 **/bin
 **/obj
-**/Migrations
 Dockerfile
 .dockerignore
 AleonAPI.sln
