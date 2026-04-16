@@ -20,7 +20,16 @@ namespace AleonAPI.Data
          // Apply any pending migrations
          try 
          {
+            var migrations = dbContextSvc.Database.GetMigrations();
+            var pending = await dbContextSvc.Database.GetPendingMigrationsAsync();
+            
+            Console.WriteLine($"DEBUG: Total migrations found in assembly: {migrations.Count()}");
+            Console.WriteLine($"DEBUG: Pending migrations to apply: {pending.Count()}");
+
+            foreach(var mig in migrations) Console.WriteLine($"DEBUG: Found migration: {mig}");
+
             await dbContextSvc.Database.MigrateAsync();
+            Console.WriteLine("✅ Database migration completed successfully.");
          }
          catch (Exception ex)
          {
