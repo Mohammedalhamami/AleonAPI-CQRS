@@ -13,10 +13,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = DataUtility.GetConnectionString(builder.Configuration);
 
-builder.Services.AddCustomSwagger();
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddCustomSwagger();
+
 
 //add Identity endpoints,
 builder.Services.AddIdentityApiEndpoints<User>(options =>
@@ -41,11 +42,8 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 using (var scope = app.Services.CreateScope())
 {

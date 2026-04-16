@@ -1,0 +1,14 @@
+**/.DS_Store
+**/.git
+**/.github
+**/.vs
+**/.vscode
+**/.cursor
+**/.agents
+**/bin
+**/obj
+**/Migrations
+Dockerfile
+.dockerignore
+AleonAPI.sln
+README.md
