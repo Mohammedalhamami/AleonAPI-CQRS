@@ -13,5 +13,10 @@ public class EnumStringFilter : ISchemaFilter
             schema.Description = "Allowed values: " +
                          string.Join(", ", Enum.GetNames(typeof(ArtifactType)));
         }
+        else if (context.Type == typeof(string) && context.MemberInfo?.Name == "CatalogStatus")
+        {
+            schema.Description = "Allowed values: " +
+                         string.Join(", ", Enum.GetNames(typeof(CatalogStatus)));
+        }
     }
 }

@@ -1,9 +1,10 @@
 using AleonAPI.Endpoints.Artifact;
+using AleonAPI.Endpoints.CatalogRecrod;
+using AleonAPI.Endpoints.Country;
 using AleonAPI.Endpoints.CustomIdentityEndpoints;
 using AleonAPI.Endpoints.Home;
 using AleonAPI.Endpoints.Sites;
 using AleonAPI.Services;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,8 @@ app.UseMiddleware<BlockIdentityEndpoints>();
 app.MapSiteEndpoints();
 app.MapArtifactMediaFileEndpoints();
 app.MapArtifactEndpoints();
-
+app.MapCatalogRecordEndpoints();
+app.MapCountryEndpoints();
 var authRouteGroup = app.MapGroup("/api/auth")
     .WithTags("Admin");
 authRouteGroup.MapIdentityApi<User>();

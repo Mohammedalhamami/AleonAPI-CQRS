@@ -22,6 +22,48 @@ namespace AleonAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AleonAPI.Models.Artifact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CatalogNumber")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("DateDiscovered")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("PublicNarrative")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("Artifacts");
+                });
+
             modelBuilder.Entity("AleonAPI.Models.ArtifactMediaFile", b =>
                 {
                     b.Property<int>("Id")
@@ -136,6 +178,30 @@ namespace AleonAPI.Migrations
                     b.ToTable("CatalogRecords");
                 });
 
+            modelBuilder.Entity("AleonAPI.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte>("Contenients")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
             modelBuilder.Entity("AleonAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -206,48 +272,6 @@ namespace AleonAPI.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Artifact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CatalogNumber")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime>("DateDiscovered")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("PublicNarrative")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("Artifacts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -422,9 +446,20 @@ namespace AleonAPI.Migrations
                     b.ToTable("Sites");
                 });
 
+            modelBuilder.Entity("AleonAPI.Models.Artifact", b =>
+                {
+                    b.HasOne("Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
             modelBuilder.Entity("AleonAPI.Models.ArtifactMediaFile", b =>
                 {
-                    b.HasOne("Artifact", "Artifact")
+                    b.HasOne("AleonAPI.Models.Artifact", "Artifact")
                         .WithMany("MediaFiles")
                         .HasForeignKey("ArtifactId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -458,7 +493,7 @@ namespace AleonAPI.Migrations
 
             modelBuilder.Entity("AleonAPI.Models.CatalogRecord", b =>
                 {
-                    b.HasOne("Artifact", "Artifact")
+                    b.HasOne("AleonAPI.Models.Artifact", "Artifact")
                         .WithMany("CatalogRecords")
                         .HasForeignKey("ArtifactId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -481,17 +516,6 @@ namespace AleonAPI.Migrations
                     b.Navigation("SubmittedBy");
 
                     b.Navigation("VerifiedBy");
-                });
-
-            modelBuilder.Entity("Artifact", b =>
-                {
-                    b.HasOne("Site", "Site")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -545,6 +569,13 @@ namespace AleonAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AleonAPI.Models.Artifact", b =>
+                {
+                    b.Navigation("CatalogRecords");
+
+                    b.Navigation("MediaFiles");
+                });
+
             modelBuilder.Entity("AleonAPI.Models.CatalogRecord", b =>
                 {
                     b.Navigation("Notes");
@@ -557,13 +588,6 @@ namespace AleonAPI.Migrations
                     b.Navigation("UploadedMedia");
 
                     b.Navigation("VerifiedCatalogRecords");
-                });
-
-            modelBuilder.Entity("Artifact", b =>
-                {
-                    b.Navigation("CatalogRecords");
-
-                    b.Navigation("MediaFiles");
                 });
 #pragma warning restore 612, 618
         }

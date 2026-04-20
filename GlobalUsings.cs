@@ -11,3 +11,4 @@ global using AleonAPI.Models;
 global using AleonAPI.Models.Response;
 global using AleonAPI.Models.Request;
 global using AleonAPI.Middleware;
+global using System.Text.Json.Serialization;

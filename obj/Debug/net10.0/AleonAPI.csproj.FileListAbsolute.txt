@@ -17,6 +17,11 @@
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.runtimeconfig.json
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/AleonAPI.pdb
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/ClosedXML.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/ClosedXML.Parser.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/DocumentFormat.OpenXml.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/DocumentFormat.OpenXml.Framework.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/ExcelNumberFormat.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Humanizer.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/MediatR.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/MediatR.Contracts.dll
@@ -46,6 +51,8 @@
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Newtonsoft.Json.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Npgsql.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/RBush.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/SixLabors.Fonts.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -56,6 +63,7 @@
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/System.Composition.Runtime.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/System.Composition.TypedParts.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/System.IO.Packaging.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.resources.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.resources.dll
 /Users/ta3leem/demos/AleonAPI/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.resources.dll

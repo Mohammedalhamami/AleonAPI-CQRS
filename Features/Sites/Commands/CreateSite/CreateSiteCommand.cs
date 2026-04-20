@@ -1,4 +1,3 @@
-using MediatR;
 
 namespace AleonAPI.Features.Sites.Commands.CreateSite;
 
