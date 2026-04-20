@@ -4,6 +4,7 @@ using AleonAPI.Endpoints.Country;
 using AleonAPI.Endpoints.CustomIdentityEndpoints;
 using AleonAPI.Endpoints.Home;
 using AleonAPI.Endpoints.Sites;
+using AleonAPI.Models;
 using AleonAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -35,6 +36,9 @@ builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
 builder.Services.AddValidation();
 builder.Services.AddControllers();
+// Register our insane background job!
+builder.Services.AddSingleton<ImportTaskQueue>();
+builder.Services.AddHostedService<ExcelImportBackgroundService>();
 
 var app = builder.Build();
 

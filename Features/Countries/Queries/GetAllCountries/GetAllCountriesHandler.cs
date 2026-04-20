@@ -8,6 +8,8 @@ public class GetAllCountriesHandler(ApplicationDbContext context) : IRequestHand
     {
         return await context.Countries
         .AsNoTracking()
+        .Skip((request.PageNumber - 1) * request.PageSize)
+        .Take(request.PageSize)
         .Select(c => new CountryResponse
         {
             Id = c.Id,

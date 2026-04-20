@@ -36,21 +36,30 @@ public static class CountryEndpoints
         return route;
     }
 
-    private static async Task<Ok<IEnumerable<CountryResponse>>> GetAllCountries(ISender sender, CancellationToken ct)
-        => TypedResults.Ok(await sender.Send(new GetAllCountriesQuery(), ct));
+    private static async Task<Ok<IEnumerable<CountryResponse>>> GetAllCountries(ISender sender, [AsParameters] GetAllCountriesQuery query, CancellationToken ct)
+        => TypedResults.Ok(await sender.Send(query, ct));
 
 
     private static async Task<Ok<CountryResponse>> CreateCountry(ISender sender, CreateCountryCommand command, CancellationToken ct)
         => TypedResults.Ok(await sender.Send(command, ct));
 
-    private static async Task<Ok<string>> ImportCountries(ISender sender, IFormFile file, CancellationToken ct)
+    private static async Task<Accepted> ImportCountries(ISender sender, IFormFile file, CancellationToken ct)
     {
-
         if (file == null || file.Length == 0)
             throw new ArgumentException("No file was uploaded.");
 
-        await using var stream = file.OpenReadStream();
+        // 1. Generate a temporary file path on the operating system
+        var tempFilePath = Path.GetTempFileName();
 
-        return TypedResults.Ok($"{await sender.Send(new ImportCountriesCommand(stream), ct)} countries imported successfully.");
+        // 2. Stream the uploaded data directly into the hard drive file
+        await using var stream = new FileStream(tempFilePath, FileMode.Create);
+        await file.CopyToAsync(stream, ct);
+        stream.Close(); // Unlock the file so the Background thread can read it!
+
+        // 3. Immediately send the string Path to MediatR so it can Queue it!
+        await sender.Send(new ImportCountriesCommand(tempFilePath), ct);
+
+        // 4. Return extremely fast HTTP 202 to user. Beautiful UX!
+        return TypedResults.Accepted(string.Empty);
     }
 }

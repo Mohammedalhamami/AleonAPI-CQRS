@@ -1,3 +1,3 @@
 namespace AleonAPI.Features.Countries.Commands.ImportCountries;
 
-public record ImportCountriesCommand(Stream FileStream) : IRequest<int>;
+public record ImportCountriesCommand(string FilePath) : IRequest;
